@@ -1,21 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Meteor } from 'meteor/meteor';
+import { Tracker } from 'meteor/tracker';
 
-const players = [{
-    _id: 1,
-    name: 'Lauren',
-    score: 99
-  }, {
-    _id: 2,
-    name: 'Cory',
-    score: -1
-  }, {
-    _id: 3,
-    name: 'Andrew',
-    score: -12
-  }
-];
+import Players from './../imports/api/Players';
 
 const renderPlayers = (players) => {
   return players.map((player) => {
@@ -23,12 +11,30 @@ const renderPlayers = (players) => {
   });
 };
 
-Meteor.startup(() => {
-  const jsx = (
-    <ul>
-      {renderPlayers(players)}
-    </ul>
-  );
+const handleSubmit = (e) => {
+  e.preventDefault();
+  const name = e.target.playerName.value;
+  if (name) {
+    e.target.playerName.value = '';
+    Players.insert({ name, score: 0 })
+  }
+};
 
-  ReactDOM.render(jsx, document.getElementById('app'));
+Meteor.startup(() => {
+  Tracker.autorun(() => {
+    const players = Players.find().fetch();
+    const jsx = (
+      <div>
+        <ul>
+          {renderPlayers(players)}
+        </ul>
+        <form onSubmit={handleSubmit}>
+          <input type="text" name="playerName" placeholder="Player name"/>
+          <button>Add player</button>
+        </form>
+      </div>
+    );
+
+    ReactDOM.render(jsx, document.getElementById('app'));
+  });
 });
