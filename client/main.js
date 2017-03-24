@@ -5,31 +5,13 @@ import { Tracker } from 'meteor/tracker';
 
 import Players from './../imports/api/Players';
 
-import TitleBar from './../imports/ui/TitleBar';
-import Player from './../imports/ui/Player';
-import AddPlayer from './../imports/ui/AddPlayer';
-
-const renderPlayers = (players) => {
-  return players.map((player) => {
-    return <Player key={player._id} player={player}/>;
-  });
-};
+import App from './../imports/ui/App';
 
 Meteor.startup(() => {
   Tracker.autorun(() => {
-    const players = Players.find().fetch();
+    const players = Players.find({}, { sort: { score: -1 }}).fetch();
     const title = 'Score Keep';
-    const subtitle = 'A simple score-keeping app';
-    const jsx = (
-      <div>
-        <TitleBar title={title} subtitle={subtitle}/>
-        <ul>
-          {renderPlayers(players)}
-        </ul>
-        <AddPlayer/>
-      </div>
-    );
 
-    ReactDOM.render(jsx, document.getElementById('app'));
+    ReactDOM.render(<App players={players} title={title}/>, document.getElementById('app'));
   });
 });
