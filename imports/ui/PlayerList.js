@@ -6,7 +6,10 @@ class PlayerList extends React.Component {
   renderPlayers() {
     const { players } = this.props;
     if (players.length === 0) {
-      return <li>Add a player to get started!</li>
+      return (
+        <div className="item">
+          <p className="item__message">Add a player to get started!</p>
+        </div>);
     } else {
       return players.map((player) => {
         return <Player key={player._id} player={player}/>;
@@ -18,9 +21,7 @@ class PlayerList extends React.Component {
   render() {
     return (
       <div>
-        <ul>
-          {this.renderPlayers()}
-        </ul>
+        {this.renderPlayers()}
       </div>
     );
   }

@@ -11,7 +11,8 @@ Meteor.startup(() => {
   Tracker.autorun(() => {
     const players = Players.find({}, { sort: { score: -1 }}).fetch();
     const title = 'Score Keep';
+    const subtitle = 'A simple score-keeping app';
 
-    ReactDOM.render(<App players={players} title={title}/>, document.getElementById('app'));
+    ReactDOM.render(<App players={players} title={title} subtitle={subtitle}/>, document.getElementById('app'));
   });
 });
